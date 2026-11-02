@@ -36,3 +36,35 @@ CREATE TABLE IF NOT EXISTS monthly_budgets (
   CONSTRAINT ck_budget_month CHECK (month BETWEEN 1 AND 12), CONSTRAINT ck_budget_amount CHECK (amount > 0),
   INDEX ix_budgets_category (category_id)
 );
+
+-- Sample data for the initial dashboard and chart demonstration.
+-- The INSERT IGNORE statements can safely be re-run.
+INSERT IGNORE INTO categories (name, kind) VALUES
+  ('Salary', 'income'),
+  ('Freelance', 'income'),
+  ('Food & Dining', 'expense'),
+  ('Transport', 'expense'),
+  ('Bills & Utilities', 'expense'),
+  ('Shopping', 'expense'),
+  ('Health', 'expense'),
+  ('Entertainment', 'expense');
+
+INSERT INTO transactions (transaction_date, kind, category_id, amount, description, payment_method)
+SELECT '2026-11-01', 'income', id, 45000.00, 'Monthly Salary', 'Bank Transfer'
+FROM categories WHERE name = 'Salary' AND kind = 'income'
+  AND NOT EXISTS (SELECT 1 FROM transactions WHERE description = 'Monthly Salary' AND transaction_date = '2026-11-01');
+
+INSERT INTO transactions (transaction_date, kind, category_id, amount, description, payment_method)
+SELECT '2026-11-02', 'expense', id, 1850.00, 'Weekly Groceries', 'UPI'
+FROM categories WHERE name = 'Food & Dining' AND kind = 'expense'
+  AND NOT EXISTS (SELECT 1 FROM transactions WHERE description = 'Weekly Groceries' AND transaction_date = '2026-11-02');
+
+INSERT INTO transactions (transaction_date, kind, category_id, amount, description, payment_method)
+SELECT '2026-11-03', 'expense', id, 600.00, 'Monthly Bus Pass', 'UPI'
+FROM categories WHERE name = 'Transport' AND kind = 'expense'
+  AND NOT EXISTS (SELECT 1 FROM transactions WHERE description = 'Monthly Bus Pass' AND transaction_date = '2026-11-03');
+
+INSERT INTO transactions (transaction_date, kind, category_id, amount, description, payment_method)
+SELECT '2026-11-04', 'expense', id, 1250.00, 'Electricity Bill', 'UPI'
+FROM categories WHERE name = 'Bills & Utilities' AND kind = 'expense'
+  AND NOT EXISTS (SELECT 1 FROM transactions WHERE description = 'Electricity Bill' AND transaction_date = '2026-11-04');

@@ -67,3 +67,37 @@ Credentials come from environment variables and `.env` is ignored. SQLAlchemy pa
 ## Project documentation
 
 See [the documentation index](docs/DELIVERABLE_TRACKER.md) for D1–D8 status, evidence, and remaining MySQL verification.
+# Personal Expense Tracking and Analysis System
+
+This is a Python Flask application for recording personal income and expenses,
+setting category budgets, and viewing server-generated analytics charts.
+
+## VS Code local setup
+
+Open this folder in VS Code and run these commands in its PowerShell terminal:
+
+```powershell
+# If VS Code reports that .venv is locked, close VS Code first and reopen it.
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+python app.py
+```
+
+Then open `http://127.0.0.1:5000`.
+
+The local app uses SQLite automatically. To use MySQL/TiDB, create a `.env`
+file (never commit it) and set `DATABASE_URL` and `SECRET_KEY`. The Flask
+models, relationships, and database operations are located in `app/models.py`,
+`app/extensions.py`, and the route files in `app/routes/`.
+
+## Main Python files
+
+- `app.py` — local Flask run command for VS Code.
+- `database.py` — safe connection test utility.
+- `app/__init__.py` — Flask application factory.
+- `app/models.py` — SQLAlchemy database tables.
+- `app/routes/web.py` — dashboard, forms, deletion, and chart pages.
+- `app/services/charts.py` — Matplotlib chart generation.
+- `schema.sql` — MySQL table and sample-data SQL.
+
