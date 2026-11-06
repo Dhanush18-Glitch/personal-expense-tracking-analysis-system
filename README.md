@@ -1,103 +1,98 @@
-# Home Budget Expense Tracker and Analysis System
-
-A Flask application for manually recording household income and expenses, setting category budgets, reviewing monthly savings, generating charts, and exporting reports. It is an educational prototype for a trusted local environment, not a banking product or source of financial advice.
-
-## Features
-
-- Income and expense CRUD with decimal currency values, filters, search, sorting, pagination API, and validation.
-- Safe category management, idempotent default categories, and protected deletion for referenced categories.
-- Monthly category budgets with utilization, variance, remaining balance, approaching-limit, overspend, and unbudgeted-spend states.
-- Pandas and NumPy summaries, trend analysis, category contributions, four Matplotlib charts, JSON APIs, and CSV exports protected against spreadsheet formula injection.
-- MySQL SQLAlchemy configuration, an initial Alembic migration, `schema.sql`, optional SQLite demo mode, pytest coverage, and academic documentation.
-
-## Stack
-
-Python 3.12, Flask, SQLAlchemy, Flask-Migrate, PyMySQL, Pandas, NumPy, Matplotlib, Jinja2, HTML/CSS, and pytest.
-
-## Setup on Windows PowerShell
-
-```powershell
-cd "C:\Users\gdhan\OneDrive\Music\Documents\ChatGPT\home expenses"
-py -3.12 -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt -r requirements-dev.txt
-Copy-Item .env.example .env
-```
-
-For the built-in SQLite demonstration mode, leave `DATABASE_URL` blank in `.env` (or do not create `.env`), then run:
-
-```powershell
-python manage.py init-db
-python manage.py seed-demo
-python manage.py run
-```
-
-Open [http://127.0.0.1:5000](http://127.0.0.1:5000). Run tests with `python -m pytest -q`.
-
-## MySQL setup
-
-Create the database and a least-privilege user in MySQL, then set this line in `.env`:
-
-```text
-DATABASE_URL=mysql+pymysql://budget_user:replace_me@localhost:3306/home_budget
-```
-
-Apply the schema without dropping existing data with `python manage.py init-db`; alternatively review and run `schema.sql` in a MySQL 8 client. The included Alembic revision is `migrations/versions/20261029_0001_initial_schema.py`. MySQL connectivity was not available in this workspace, so it remains an external verification step.
-
-## Vercel deployment
-
-The repository includes `api/index.py` and `vercel.json` for Vercel's Python runtime. A public Vercel deployment requires a hosted MySQL database because serverless SQLite files are not durable. In the Vercel project settings, add `DATABASE_URL` and `SECRET_KEY` from the `.env.example` format, then deploy:
-
-```powershell
-npx vercel login
-npx vercel --prod
-```
-
-Use the generated `*.vercel.app` URL only after Vercel reports a successful production deployment. Initialize the hosted database once with the schema/migration tooling before exposing the site publicly. The configuration excludes tests, documentation, presentation outputs, and local virtual environments from the function bundle.
-
-## API summary
-
-`GET /api/health`, `/api/dashboard`, `/api/transactions`, `/api/categories`, `/api/budgets`, `/api/analytics/monthly`, `/api/analytics/categories`, `/api/analytics/budgets`, and the CSV export endpoints are implemented. Full examples appear in [API documentation](docs/API_DOCUMENTATION.md).
-
-## Security and limitations
-
-Credentials come from environment variables and `.env` is ignored. SQLAlchemy parameterizes database operations; forms include a session CSRF token; server-side validation rejects invalid values; error responses avoid secrets and SQL; and CSV cells beginning with formula characters receive a leading apostrophe. Authentication is intentionally out of scope, so do not expose this prototype publicly. The application has no bank, payment-gateway, or financial-advice integration.
-
-## Project documentation
-
-See [the documentation index](docs/DELIVERABLE_TRACKER.md) for D1–D8 status, evidence, and remaining MySQL verification.
 # Personal Expense Tracking and Analysis System
 
-This is a Python Flask application for recording personal income and expenses,
-setting category budgets, and viewing server-generated analytics charts.
+A Python Flask web application for recording personal income and expenses,
+setting monthly budgets, checking savings, viewing charts, and downloading
+reports. It is an academic project for personal expense management.
 
-## VS Code local setup
+## Main features
 
-Open this folder in VS Code and run these commands in its PowerShell terminal:
+- Add, edit, search, filter, and delete income and expense records.
+- Add income and expense categories.
+- Create monthly category budgets and compare a budget with actual spending.
+- View total income, total expenses, savings, and budget status on the dashboard.
+- Select a date, month, or year to view records and charts for that period.
+- Generate expense category, income-versus-expense, savings, and budget charts.
+- Download transaction data as CSV and generate reports.
+
+## Tools used
+
+| Tool | Where it is used |
+| --- | --- |
+| Python | Main programming language for the application. |
+| Flask | Creates routes, handles forms, and runs the web application. |
+| Jinja2 | Shows database data inside HTML pages. |
+| HTML and CSS | Builds the page layout, forms, buttons, and responsive design. |
+| SQLAlchemy | Connects Python code with database tables safely. |
+| MySQL / TiDB Cloud | Stores transactions, categories, and monthly budgets. |
+| SQLite | Local database option for testing on a computer. |
+| Matplotlib | Creates pie, bar, and line charts on the server. |
+| Pandas and NumPy | Helps calculate totals, trends, and spending analysis. |
+| Flask-Migrate / Alembic | Manages database table changes. |
+| PyMySQL | Lets Flask connect to MySQL-compatible databases. |
+| Visual Studio Code | Used to write, organise, and run the project code. |
+| Git and GitHub | Used for version control and publishing the project source. |
+| Vercel | Used to deploy the Flask project with a public link. |
+
+## Team members
+
+- Dhanush Kumar Yadav — Project owner and developer
+- Karthik Nadhakota — Team member
+
+## Project structure
+
+- `app.py` — starts the Flask application in VS Code.
+- `database.py` — checks the database connection.
+- `app/__init__.py` — creates and configures the Flask app.
+- `app/models.py` — defines database tables.
+- `app/routes/web.py` — dashboard, forms, budgets, reports, and delete actions.
+- `app/routes/api.py` — JSON API endpoints.
+- `app/services/charts.py` — creates Matplotlib charts.
+- `schema.sql` — MySQL tables and sample records.
+- `requirements.txt` — required Python packages.
+
+## Run locally in VS Code
+
+Open this project folder in VS Code. Run the following commands in the PowerShell terminal:
 
 ```powershell
-# If VS Code reports that .venv is locked, close VS Code first and reopen it.
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 python app.py
 ```
 
-Then open `http://127.0.0.1:5000`.
+Then open [http://127.0.0.1:5000](http://127.0.0.1:5000).
 
-The local app uses SQLite automatically. To use MySQL/TiDB, create a `.env`
-file (never commit it) and set `DATABASE_URL` and `SECRET_KEY`. The Flask
-models, relationships, and database operations are located in `app/models.py`,
-`app/extensions.py`, and the route files in `app/routes/`.
+## Database setup
 
-## Main Python files
+For local testing, the project uses SQLite automatically.
 
-- `app.py` — local Flask run command for VS Code.
-- `database.py` — safe connection test utility.
-- `app/__init__.py` — Flask application factory.
-- `app/models.py` — SQLAlchemy database tables.
-- `app/routes/web.py` — dashboard, forms, deletion, and chart pages.
-- `app/services/charts.py` — Matplotlib chart generation.
-- `schema.sql` — MySQL table and sample-data SQL.
+For MySQL or TiDB Cloud, create a `.env` file and add your private database
+connection string and secret key. Never upload `.env` to GitHub.
 
+```text
+DATABASE_URL=mysql+pymysql://USERNAME:PASSWORD@HOST:PORT/DATABASE
+SECRET_KEY=replace-with-a-private-secret
+```
+
+Create tables with:
+
+```powershell
+python manage.py init-db
+```
+
+You can also use `schema.sql` in a MySQL client to create the tables and sample data.
+
+## Deployment
+
+The project contains `api/index.py` and `vercel.json` for Vercel deployment.
+In Vercel, add `DATABASE_URL` and `SECRET_KEY` as environment variables before
+deploying. A hosted MySQL-compatible database is required because a Vercel
+function does not keep local SQLite data permanently.
+
+## API endpoints
+
+The project includes health, dashboard, transaction, category, budget, monthly
+analytics, category analytics, budget analytics, and CSV export API endpoints.
+See [API documentation](docs/API_DOCUMENTATION.md) for details.
