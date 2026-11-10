@@ -1,8 +1,10 @@
-# Personal Expense Tracking and Analysis System
+# Home Budget Expense Tracker and Analysis System
 
-A Python Flask web application for recording personal income and expenses,
-setting monthly budgets, checking savings, viewing charts, and downloading
-reports. It is an academic project for personal expense management.
+A Flask-based Home Budget Expense Tracker and Analysis System for managing
+income, expenses, monthly budgets, savings analytics, live charts, reports,
+and CSV exports. It is an academic project for personal expense management.
+
+**Live website:** [home-budget-tracker-nu.vercel.app](https://home-budget-tracker-nu.vercel.app)
 
 ## Main features
 
@@ -35,8 +37,9 @@ reports. It is an academic project for personal expense management.
 
 ## Team members
 
-- Dhanush Kumar Yadav — Project owner and developer
-- Karthik Nadhakota — Team member
+- Dhanush Kumar Yadav (`Dhanush18-Glitch`) — Project owner and Frontend Developer
+- Karthik Nadhakota (`karthiknadhakota-code`) — Backend Developer and Contributor
+- Lokesh Raju (`ALokeshraju-289`) — Contributor
 
 ## Project structure
 
